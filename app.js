@@ -5,6 +5,7 @@ let worker;
 let ready = false;
 let running = false;
 let timer;
+let loadTimer;
 
 for (const id of fields) {
   const field = $(id);
@@ -38,16 +39,28 @@ function setVerdict(label, detail, css = '', error = '') {
 function startWorker() {
   ready = false;
   $('runButton').disabled = true;
-  $('runtimeStatus').textContent = 'Python 載入中…';
+  $('runtimeStatus').textContent = '正在啟動判題環境…';
   worker = new Worker('worker.js', { type: 'module' });
+  loadTimer = setTimeout(() => {
+    if (ready) return;
+    worker.terminate();
+    $('runtimeStatus').textContent = 'Python 載入逾時';
+    setVerdict('載入失敗', 'Python 執行環境無法啟動。請檢查網路或瀏覽器設定。', 'verdict-error');
+  }, 20000);
   worker.onmessage = ({ data }) => {
+    if (data.type === 'progress') {
+      $('runtimeStatus').textContent = data.message;
+      return;
+    }
     if (data.type === 'ready') {
+      clearTimeout(loadTimer);
       ready = true;
       $('runButton').disabled = false;
       $('runtimeStatus').textContent = 'Python 已就緒';
       return;
     }
     if (data.type === 'load-error') {
+      clearTimeout(loadTimer);
       $('runtimeStatus').textContent = 'Python 載入失敗，請重新整理頁面';
       setVerdict('載入失敗', '請檢查網路連線後重新整理。', 'verdict-error', data.message);
       return;
@@ -65,6 +78,7 @@ function startWorker() {
   };
   worker.onerror = (event) => {
     clearTimeout(timer);
+    clearTimeout(loadTimer);
     running = false;
     ready = false;
     $('runtimeStatus').textContent = 'Python 執行環境發生錯誤';
