@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="在瀏覽器練習 Python APCS 題目，貼上 AI 產生的測資與判題程式即可判題。">
+  <title>APCS Practice Judge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="shell">
+    <header class="hero">
+      <div class="eyebrow">PERSONAL PRACTICE / PYTHON</div>
+      <h1>APCS Practice Judge</h1>
+      <p>把 AI 產生的測資與判題程式貼進來，專心寫你的解答。</p>
+      <div class="hero-actions"><a href="judge.md" target="_blank" rel="noopener">開啟給 AI 的 judge.md ↗</a><span id="runtimeStatus" role="status">Python 載入中…</span></div>
+    </header>
+
+    <section class="grid" aria-label="判題工作區">
+      <div class="left-col">
+        <section class="card">
+          <div class="section-heading"><span class="step">01</span><div><h2>題目</h2><p>貼上 AI 給你的題目，方便練習時查看。</p></div></div>
+          <textarea id="problem" class="problem-field" placeholder="在這裡貼上 APCS 題目…" spellcheck="false"></textarea>
+        </section>
+        <section class="card">
+          <div class="section-heading"><span class="step">02</span><div><h2>你的 Python 解答</h2><p>使用 input() 讀取資料，使用 print() 輸出答案。</p></div></div>
+          <textarea id="solution" class="code-field" placeholder="n = int(input())&#10;print(n)" spellcheck="false" aria-label="你的 Python 解答"></textarea>
+        </section>
+      </div>
+      <div class="right-col">
+        <section class="card">
+          <div class="section-heading"><span class="step">03</span><div><h2>隱藏測資</h2><p>貼上 AI 給你的 JSON；內容預設遮住。</p></div></div>
+          <textarea id="tests" class="hidden-field" placeholder="貼上 JSON 測資…" spellcheck="false" aria-label="隱藏測資"></textarea>
+          <button class="link-button" id="toggleTests" type="button" aria-pressed="false">顯示測資</button>
+        </section>
+        <section class="card">
+          <div class="section-heading"><span class="step">04</span><div><h2>AI 判題程式</h2><p>貼上 judge.md 格式的 Python 程式碼。</p></div></div>
+          <textarea id="checker" class="hidden-field checker-field" placeholder="貼上 def judge(run_code, tests): …" spellcheck="false" aria-label="AI 判題程式"></textarea>
+          <button class="link-button" id="toggleChecker" type="button" aria-pressed="false">顯示判題程式</button>
+        </section>
+      </div>
+    </section>
+
+    <section class="result-card" aria-label="判題結果">
+      <div class="result-top"><div><div class="eyebrow">VERDICT</div><h2 id="verdict" aria-live="polite">尚未判題</h2></div><button id="runButton" class="run-button" type="button" disabled>開始判題 <span>↵</span></button></div>
+      <p id="detail">載入 Python 後即可開始。整次判題最多執行 10 秒。</p>
+      <pre id="errorDetail" class="error-detail" hidden></pre>
+    </section>
+    <footer>程式與測資在你的瀏覽器中執行。輸入內容只暫存於這個瀏覽器。</footer>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
