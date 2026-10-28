@@ -1,7 +1,8 @@
-import { loadPyodide } from 'https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs';
-
 let pyodide;
 try {
+  self.postMessage({ type: 'progress', message: '正在下載 Python 執行環境…' });
+  const { loadPyodide } = await import('https://cdn.jsdelivr.net/pyodide/v314.0.7/full/pyodide.mjs');
+  self.postMessage({ type: 'progress', message: '正在啟動 Python…' });
   pyodide = await loadPyodide();
   self.postMessage({ type: 'ready' });
 } catch (error) {
